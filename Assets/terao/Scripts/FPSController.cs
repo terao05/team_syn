@@ -12,15 +12,14 @@ public class FPSController : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 movement;
-    private bool isCursorLocked = true; // マウスカーソルがロックされているかどうかのフラグ
+    private float verticalLookRotation = 0f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        LockCursor(); // 初期状態でマウスカーソルをロック
 
         // CurveControlledBob のセットアップ
-        headBob.Setup(Camera.main, 1f);
+        headBob.Setup(Camera.main, 1.4f);
     }
 
     void Update()
@@ -31,30 +30,17 @@ public class FPSController : MonoBehaviour
 
         // 移動方向の計算
         movement = transform.right * moveX + transform.forward * moveZ;
+                      
+        float mouseX = Input.GetAxis("Mouse X") * lookSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * lookSensitivity;
+        verticalLookRotation -= mouseY;
+        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
 
-        // 右クリックが押された場合
-        if (Input.GetMouseButtonDown(1))
-        {
-            isCursorLocked = true; // マウスカーソルをロック
-            LockCursor();
-        }
+        transform.Rotate(Vector3.up * mouseX);
+        Camera.main.transform.localRotation = Quaternion.Euler(verticalLookRotation, 0f, 0f);
 
-        // 右クリックが離された場合
-        if (Input.GetMouseButtonUp(1))
-        {
-            isCursorLocked = false; // マウスカーソルをロック解除
-            UnlockCursor();
-        }
-
-        // 右クリックを押している間のみ視点の回転を行う
-        if (Input.GetMouseButton(1))
-        {
-            float mouseX = Input.GetAxis("Mouse X") * lookSensitivity;
-            transform.Rotate(Vector3.up * mouseX);
-        }
     }
-
-    void FixedUpdate()
+        void FixedUpdate()
     {
         // Rigidbodyに力を加えて移動
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
@@ -62,25 +48,11 @@ public class FPSController : MonoBehaviour
         // カメラの位置を揺らす
         UpdateBobCamera();
     }
-
-    // マウスカーソルをロックする関数
-    void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
-    // マウスカーソルのロックを解除する関数
-    void UnlockCursor()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-    }
     private void UpdateBobCamera()
     {
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.LeftArrow)|| Input.GetKey(KeyCode.A)|| Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.DownArrow)|| Input.GetKey(KeyCode.S))
         {
-            Vector3 bobPosition = headBob.DoHeadBob(0.8f);
+            Vector3 bobPosition = headBob.DoHeadBob(1.1f);
             Camera.main.transform.localPosition = bobPosition;
         }
     }
