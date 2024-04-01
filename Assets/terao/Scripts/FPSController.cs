@@ -5,6 +5,7 @@ using UnityStandardAssets.Utility;
 
 public class FPSController : MonoBehaviour
 {
+   
     public float moveSpeed = 0.2f;
     public float lookSensitivity = 3f;
 
