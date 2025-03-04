@@ -25,6 +25,7 @@ public class CameraZoomSetter : MonoBehaviour
         }
         CameraManager.instance.ChangeCamera(subCamera);
         subCamera.gameObject.SetActive(true);
+        Cursor.visible = true;
     }
     public void EnableCollider()
     {

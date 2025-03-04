@@ -14,6 +14,8 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
+        Cursor.visible = false;
+        
     }
     public void ChangeCamera(Camera subCamera)
     {
@@ -38,6 +40,25 @@ public class CameraManager : MonoBehaviour
         //player.SetActive(true);
         //}
 
+    }
+    private void Update()
+    {
+        Cursor.visible = false;
+        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.F))
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(mainCamera.ViewportPointToRay(new Vector2(0.5f,0.5f)),out hit, 100.0f))
+            {
+                if (hit.collider.CompareTag("Event"))
+                {
+                    hit.collider.gameObject.GetComponent<CameraZoomSetter>().Onclick();
+                }
+                if (hit.collider.CompareTag("Item"))
+                {
+                    hit.collider.gameObject.GetComponent<PickupObject>().OnclickObj();
+                }
+            }
+        }
     }
 
     public void MainCameraBack(Camera subCamera)

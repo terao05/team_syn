@@ -32,4 +32,8 @@ public class Slot : MonoBehaviour
     {
         image.sprite = item.sprite;
     }
+    public void useitem()
+    {
+        this.item = null;
+    }
 }

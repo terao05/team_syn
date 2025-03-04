@@ -28,4 +28,8 @@ public class ItemBox : MonoBehaviour
         }
         //Debug.Log(item.type);
     }
+    public void UseItem()
+    {
+
+    }
 }
