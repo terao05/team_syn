@@ -10,6 +10,11 @@ public class Item
     {
         Cube,
         Ball,
+        RedConicalBeak,
+        YellowConicalBeak,
+        BlueConicalBeak,
+        flower
+
     }
     public Type type;       //Ží—Þ
     public Sprite sprite;   //Slot‚É•\Ž¦‚·‚é‰æ‘œ
