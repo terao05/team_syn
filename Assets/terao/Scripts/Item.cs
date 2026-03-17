@@ -13,7 +13,8 @@ public class Item
         RedConicalBeak,
         YellowConicalBeak,
         BlueConicalBeak,
-        flower
+        flower,
+        sinsya
 
     }
     public Type type;       //Ží—Þ
