@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/terao/Scene/Start.unity
+    guid: cb0ed6d06b20abb488ad20f0fce2fbd1
+  - enabled: 1
+    path: Assets/terao/Scene/1floor.unity
+    guid: abc37cccc2ae9484091b8c8e773c4c9f
   m_configObjects: {}
