@@ -32,8 +32,20 @@ public class Slot : MonoBehaviour
     {
         image.sprite = item.sprite;
     }
+
+    // アイテムを使用・削除した時に、データと見た目の両方を消去する
+    public void HideSlot()
+    {
+        this.item = null;      // データを空にする（これでIsEmptyがtrueになる）
+        image.sprite = null;   // 参照を消す
+        //image.enabled = false; // Imageコンポーネントをオフにして見えなくする
+    }
+
     public void useitem()
     {
         this.item = null;
     }
+
+    // Slotクラスにこれを追加しておくと便利です
+    public Item GetItem() { return item; }
 }

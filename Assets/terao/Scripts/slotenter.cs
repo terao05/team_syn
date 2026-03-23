@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,6 +40,8 @@ public class slotenter : MonoBehaviour
     }
     public void itemuse(Image imageComponent)
     {
+        Slot slot = GetComponent<Slot>();
+
         string sourceImageName = imageComponent.sprite.name;
         if (sourceImageName == "Red")
         {
@@ -104,5 +106,111 @@ public class slotenter : MonoBehaviour
             lightmagic.Setlight(true);
         }
 
+    }
+}*/
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class slotenter : MonoBehaviour
+{
+    public YesNoMsg yesNoMsg;
+    public boolflower Boolflower;
+    public Bloom bloom;
+    public lightmagic lightmagic;
+
+    public void Onclick()
+    {
+        Image imageComponent = GetComponent<Image>();
+
+        // 画像が入っていない（空の）スロットは何もしない
+        if (imageComponent == null || imageComponent.sprite == null)
+        {
+            Debug.Log("スロットは空です。");
+            return;
+        }
+
+        string sourceImageName = imageComponent.sprite.name;
+
+        // 確認メッセージを表示
+        yesNoMsg.ShowMessage(
+            sourceImageName + "を使用しますか？",
+            () => itemuse(imageComponent),  // Yes選択時
+            () => Debug.Log("キャンセルされました。"), // No選択時
+            "はい", "いいえ"
+        );
+    }
+
+    public void itemuse(Image imageComponent)
+    {
+        // 自身のSlotコンポーネントを取得
+        Slot slot = GetComponent<Slot>();
+        Item usedItem = slot.GetItem(); // 消す前にアイテムデータを取得
+        string sourceImageName = imageComponent.sprite.name;
+          
+
+        // --- アイテムごとの効果処理 ---
+        if (sourceImageName == "Red")
+        {
+            // アイテムデータを記録リストに送る
+            Boolflower.AddConsumedItem(usedItem);
+            Boolflower.Setred1(true);
+            if (Boolflower.wrong == true)
+            {
+                Boolflower.Setwrong(true);
+            }
+            Debug.Log("red1の状態" + Boolflower.red1);
+            // 使用したのでスロットを空にする
+            if (slot != null) slot.HideSlot();
+        }
+        else if (sourceImageName == "Blue")
+        {
+            // アイテムデータを記録リストに送る
+            Boolflower.AddConsumedItem(usedItem);
+            Boolflower.Setblue2(true);
+            if (Boolflower.wrong == true || Boolflower.red1 == false)
+            {
+                Boolflower.Setwrong(true);
+            }
+            if (slot != null) slot.HideSlot();
+        }
+        else if (sourceImageName == "Yellow")
+        {
+            // アイテムデータを記録リストに送る
+            Boolflower.AddConsumedItem(usedItem);
+            Boolflower.Setyellow3(true);
+            if (Boolflower.wrong == true || Boolflower.red1 == false || Boolflower.blue2 == false)
+            {
+                Boolflower.Setwrong(true);
+            }
+            if (slot != null) slot.HideSlot();
+        }
+        else if (sourceImageName == "lightmagicitem")
+        {
+            lightmagic.Setlight(true);
+            if (slot != null) slot.HideSlot();
+        }
+
+        // --- ギミック判定 ---
+        CheckFlowerGimmick();
+    }
+
+    // 花のギミック状態をチェックする専用メソッド（整理のため分割）
+    void CheckFlowerGimmick()
+    {
+        if (Boolflower.red1 && Boolflower.blue2 && Boolflower.yellow3)
+        {
+            if (Boolflower.wrong)
+            {
+                Debug.Log("順番が間違っています。");
+                Boolflower.Setcount(true);
+            }
+            else
+            {
+                bloom.animstart();
+            }
+        }
     }
 }
